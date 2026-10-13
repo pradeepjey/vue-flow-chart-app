@@ -1,0 +1,143 @@
+@import 'tailwindcss';
+@import '@vue-flow/core/dist/style.css';
+@import '@vue-flow/core/dist/theme-default.css';
+@import '@vue-flow/controls/dist/style.css';
+@import '@vue-flow/minimap/dist/style.css';
+
+/* shadcn (new-york, neutral) design tokens */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --canvas: oklch(0.985 0.002 247);
+
+  --kind-trigger: #e11d48;
+  --kind-message: #0d9488;
+  --kind-comment: #7c3aed;
+  --kind-hours: #ea580c;
+  --branch-success: #16a34a;
+  --branch-failure: #dc2626;
+  --edge-default: #94a3b8;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-canvas: var(--canvas);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html,
+  body,
+  #app {
+    @apply h-full;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+}
+
+/* ---------- Motion (GPU-friendly: transform + opacity only) ---------- */
+@keyframes overlay-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes overlay-out { from { opacity: 1 } to { opacity: 0 } }
+@keyframes dialog-in {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.97) }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1) }
+}
+@keyframes dialog-out {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1) }
+  to { opacity: 0; transform: translate(-50%, -48%) scale(0.97) }
+}
+@keyframes pop-in { from { opacity: 0; transform: scale(0.96) } to { opacity: 1; transform: scale(1) } }
+
+.overlay-anim[data-state='open'] { animation: overlay-in 160ms ease-out }
+.overlay-anim[data-state='closed'] { animation: overlay-out 120ms ease-in }
+.dialog-anim[data-state='open'] { animation: dialog-in 180ms cubic-bezier(0.16, 1, 0.3, 1) }
+.dialog-anim[data-state='closed'] { animation: dialog-out 120ms ease-in }
+.popover-anim[data-state='open'] { animation: pop-in 140ms cubic-bezier(0.16, 1, 0.3, 1) }
+
+.drawer-enter-active,
+.drawer-leave-active {
+  transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1), opacity 200ms ease;
+  will-change: transform;
+}
+.drawer-enter-from,
+.drawer-leave-to {
+  transform: translateX(100%);
+  opacity: 0.6;
+}
+
+.fade-swap-enter-active,
+.fade-swap-leave-active { transition: opacity 140ms ease, transform 160ms ease }
+.fade-swap-enter-from { opacity: 0; transform: translateY(4px) }
+.fade-swap-leave-to { opacity: 0 }
+
+.toast-enter-active, .toast-leave-active { transition: transform 200ms ease, opacity 200ms ease }
+.toast-enter-from, .toast-leave-to { opacity: 0; transform: translateY(8px) }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important }
+}
+
+/* ---------- Vue Flow theming ---------- */
+.vue-flow { background: var(--canvas) }
+.vue-flow__node {
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 0.75rem;
+}
+.vue-flow__node:focus-visible { outline: none }
+.vue-flow__node:focus-visible .flow-node { box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 60%, transparent) }
+.vue-flow__node.dragging .flow-node { box-shadow: 0 12px 28px -8px rgb(15 23 42 / 0.25) }
+.vue-flow__handle {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border: 1.5px solid var(--edge-default);
+}
+.vue-flow__edge-path { stroke: var(--edge-default); stroke-width: 1.5 }
+.vue-flow__edge.edge--success .vue-flow__edge-path { stroke: var(--branch-success) }
+.vue-flow__edge.edge--failure .vue-flow__edge-path { stroke: var(--branch-failure) }
+.vue-flow__controls { box-shadow: 0 1px 3px rgb(0 0 0 / 0.1); border-radius: 0.5rem; overflow: hidden }
+.vue-flow__minimap { border-radius: 0.5rem; overflow: hidden; box-shadow: 0 1px 3px rgb(0 0 0 / 0.1) }
