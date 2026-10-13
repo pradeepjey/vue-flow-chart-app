@@ -40,12 +40,6 @@ npm run preview    # serve the production build
 | Pinia for state, Vue Router for routing | `stores/flow.ts`, `router/index.ts` |
 | UI built from shadcn-vue components (reka-ui + Tailwind v4 + CVA) | `components/ui/*` |
 
-### Nice-to-haves (all implemented)
-
-- **Undo / redo** for moves, edits, creates, deletes and tidy-layout. Use the toolbar buttons or `Ctrl/⌘+Z`, `Ctrl/⌘+Shift+Z` and `Ctrl+Y`.
-- **Keyboard access**: `Tab` moves through the nodes, `Enter`/`Space` opens or closes a node's drawer, and `Esc` closes the drawer. Every control has a label, and validation errors are announced with `role="alert"`.
-- **CI**: `.github/workflows/ci.yml` installs dependencies, type-checks, runs the tests and builds the app on every push and pull request.
-
 ---
 
 ## Project structure
@@ -161,9 +155,3 @@ The `components/ui` folder follows the shadcn-vue conventions: copied-in compone
 - **Components**: node cards, the time picker, each field editor (including file-upload validation), the details panel (dirty tracking, validation, reset, delete confirmation, reloading after undo), the create dialog, and the drawer route (URL access, redirects for connectors and unknown ids, saving through mutations).
 
 ---
-
-## Possible next steps
-
-- Save the document to a real backend (or `localStorage`) so edits survive a reload.
-- Connect and re-parent nodes by dragging edges.
-- Add an end-to-end smoke test with Playwright to CI.
